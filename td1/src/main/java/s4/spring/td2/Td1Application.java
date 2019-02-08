@@ -1,13 +1,13 @@
-package com.example.demo;
+package s4.spring.td2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Td0Application {
+public class Td1Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Td0Application.class, args);
+		SpringApplication.run(Td1Application.class, args);
 	}
 
 }
