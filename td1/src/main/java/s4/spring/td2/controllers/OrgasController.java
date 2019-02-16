@@ -1,13 +1,17 @@
 package s4.spring.td2.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.view.RedirectView;
 
 import s4.spring.td2.entities.Groupe;
 import s4.spring.td2.entities.Organization;
@@ -22,11 +26,45 @@ public class OrgasController {
 	@Autowired
 	private GroupesRepository repoGroupes;
 	
-	@GetMapping("path:(?:index)?}")
-	@ResponseBody
-	public String index() {
-		return "index";
+	@GetMapping({"","index"})
+	public String index(Model model) {
+		List<Organization> orgas = orgasRepo.findAll();
+		model.addAttribute("orgas",orgas);
+		return "orgas/index";
 	}
+	
+	@PostMapping("submit")
+	public RedirectView submit(Organization postedOrga) {
+		if(postedOrga.getId()!=0) {
+			int id = postedOrga.getId();
+			Optional<Organization>opt=orgasRepo.findById(id);
+			if(opt.isPresent()) {
+				Organization orga=opt.get();
+				copyFrom(postedOrga,orga);
+				orgasRepo.save(orga);
+			}
+			else {
+				return new RedirectView("/orgas/");
+			}
+		}
+		else {
+			orgasRepo.save(postedOrga);
+		}
+		return new RedirectView("/orgas/");
+	}
+	
+	@PostMapping("submit")
+	public RedirectView submitNew(Organization postedOrga) {
+		orgasRepo.save(postedOrga);
+		return new RedirectView("/orgas/");
+	}
+	
+	private void copyFrom(Organization source,Organization dest) {
+		dest.setName(source.getName());
+		dest.setDomain(source.getDomain());
+		dest.setAliases(source.getAliases());
+	}
+	
 	
 	@RequestMapping("create")
 	@ResponseBody
@@ -62,5 +100,32 @@ public class OrgasController {
 		
 		return "Organisation inexistante";
 			
+	}
+	
+	@GetMapping("orgas/display/{id}")
+	public String display(Model model) {
+		
+		return null;
+	}
+	
+	@GetMapping("new")
+	public String frmNew(Model model) {
+		model.addAttribute("orga",new Organization());
+		return "orgas/frm";
+	}
+	
+	@GetMapping("edit/{id}")
+	public String frmEdit(@PathVariable int id,Model model) {
+		Optional<Organization> opt=orgasRepo.findById(id);
+		if(opt.isPresent()) {
+			model.addAttribute("orga",opt.get());
+			return "orgas/frm";
+		}
+		return "orgas/404";
+	}
+	
+	@RequestMapping("404")
+	public String notfound() {
+		return "404";
 	}
 }

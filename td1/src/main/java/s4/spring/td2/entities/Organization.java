@@ -15,10 +15,10 @@ public class Organization {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
-	private String name;
-	private String domain;
-	private String aliases;
-	private String city;
+	private String name="";
+	private String domain="";
+	private String aliases="";
+	private String city="";
 	@OneToMany(mappedBy="organization",cascade=CascadeType.ALL)
 	private List<Groupe> groupes;
 	public Organization() {
