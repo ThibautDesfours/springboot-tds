@@ -21,6 +21,8 @@ import s4.spring.td2.repositories.OrgaRepository;
 @Controller
 @RequestMapping("/orgas/")
 public class OrgasController {
+	
+	
 	@Autowired
 	private OrgaRepository orgasRepo;
 	@Autowired
