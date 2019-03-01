@@ -55,12 +55,7 @@ public class OrgasController {
 		return new RedirectView("/orgas/");
 	}
 	
-	@PostMapping("submit")
-	public RedirectView submitNew(Organization postedOrga) {
-		orgasRepo.save(postedOrga);
-		return new RedirectView("/orgas/");
-	}
-	
+
 	private void copyFrom(Organization source,Organization dest) {
 		dest.setName(source.getName());
 		dest.setDomain(source.getDomain());
