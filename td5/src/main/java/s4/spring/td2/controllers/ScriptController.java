@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,13 +38,9 @@ public class ScriptController {
 	private UsersRepository userRepo;
 	
 
-	/*
-	 * @GetMapping("{path:(?:index)?}") // "?" = il y a 0 ou 1 fois index private
-	 * String index() { return "index"; }
-	 */
-
 	@GetMapping({ "", "index" })
-	public String index(Model model) {
+	public String index(Model model, HttpSession session) {
+		model.addAttribute("user", session.getAttribute("user"));
 		List<Script> scripts = scriptRepo.findAll();
 		model.addAttribute("scripts", scripts);
 		return "scripts/index";

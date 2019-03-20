@@ -3,6 +3,7 @@ package s4.spring.td2.controllers;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,14 +32,21 @@ public class LoginController {
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public RedirectView login(HttpServletRequest request, @RequestParam("login") String login, 
-			@RequestParam("password") String password) {
+			@RequestParam("password") String password,HttpSession session) {
 		List<User> users=userRepo.findAll();
 		for(User user : users) {
 			if(login.equals(user.getLogin()) && password.equals(user.getPassword())) {
-				return new RedirectView("/scripts/index");
+				session.setAttribute("user", user);
+				return new RedirectView("/scripts/");
 			}
 		}
-		return new RedirectView("/errorLogin");	
+		return new RedirectView("/logError/");	
+	}
+	
+	@RequestMapping(value = "logout", method = RequestMethod.POST)
+	public String logout(HttpServletRequest request, HttpSession session) {
+		session.removeAttribute("user");
+		return "/log/bye";
 	}
 
 }
