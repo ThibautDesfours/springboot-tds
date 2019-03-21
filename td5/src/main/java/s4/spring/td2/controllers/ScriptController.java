@@ -37,13 +37,33 @@ public class ScriptController {
 	@Autowired
 	private UsersRepository userRepo;
 	
-
-	@GetMapping({ "", "index" })
+	@GetMapping({ "","index" })
 	public String index(Model model, HttpSession session) {
-		model.addAttribute("user", session.getAttribute("user"));
-		List<Script> scripts = scriptRepo.findAll();
-		model.addAttribute("scripts", scripts);
+		model.addAttribute("user",session.getAttribute("user"));
 		return "scripts/index";
+	}
+	@GetMapping({ "new" })
+	public String formScript(Model model, HttpSession session) {
+		List<Language> languages = langRepo.findAll();
+		List<Category> categories = cateRepo.findAll();
+		List<History> histories = histoRepo.findAll();
+		model.addAttribute("languages",languages);
+		model.addAttribute("categories",categories);
+		model.addAttribute("histories",histories);
+		return "scripts/ajoutScripts";
+	}
+	
+	@RequestMapping(value = "submit", method = RequestMethod.POST)
+	public String ajoutScript(Model model, HttpSession session, @RequestParam("id") String id, @RequestParam("title") String title,
+			@RequestParam("description") String description, @RequestParam("content") String content, @RequestParam("language") String language,
+			@RequestParam("categorie") String categorie, @RequestParam("idUser") String idUser) {
+		Script script = new Script(Integer.parseInt(idUser),Integer.parseInt(categorie),Integer.parseInt(language));
+		script.setId(Integer.parseInt(id));
+		script.setTitle(title);
+		script.setDescription(description);
+		script.setContent(content);
+		scriptRepo.save(script);
+		return "scripts/";
 	}
 
 	

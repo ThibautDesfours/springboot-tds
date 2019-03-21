@@ -1,6 +1,7 @@
 package s4.spring.td2.entities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -29,6 +30,42 @@ public class Script {
 	
 	@ManyToOne
 	private Category category;
+	
+	private String title;
+	private String description;
+	private String content;
+	private Date creationDate;
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
 
 	public int getId() {
 		return id;
@@ -70,8 +107,11 @@ public class Script {
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	public Script() {
+	public Script(int idUser, int idCategory, int idLanguage) {
 		histories = new ArrayList();
+		user.setId(idUser);
+		category.setId(idCategory);
+		language.setId(idLanguage);
 	}
 	
 	

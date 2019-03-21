@@ -1,0 +1,49 @@
+{{>main/header}}
+<form class="ui form" method="POST" action="http://127.0.0.1:8081/scripts/submit">
+  <div class="two fields">
+	  <div class="field">
+	    <label>ID</label>
+	    <input type="text" name="id" placeholder="ID">
+	  </div>
+	  <div class="field">
+	    <label>Title</label>
+	    <input type="text" name="title" placeholder="Title">
+	  </div>
+  </div>
+  <div class="two fields">
+	  <div class="field">
+	  	<label>Description</label>
+	    <input type="text" name="description" placeholder="Description">
+	  </div>
+	  <div class="field">
+	  	<label>Content</label>
+	    <input type="text" name="content" placeholder="Content">
+	  </div>
+  </div>
+  <div class="two fields">
+	  <div class="field">
+	  	<label>Language</label>
+	    <select class="ui fluid dropdown" name="language">
+	        <option disabled selected>Language</option>
+	        {{#languages}}
+	        	<option value="{{id}}">{{name}}</option>
+	        {{/languages}}
+	    </select>
+     </div>
+	 <div class="field">
+	  	<label>Catégorie</label>
+	    <select class="ui fluid dropdown" name="categorie">
+	        <option disabled selected>Catégorie</option>
+	        {{#categories}}
+	        	<option value="{{id}}">{{name}}</option>
+	        {{/categories}}
+	    </select>
+	 </div>
+  </div>
+  <input type="hidden" name="idUser" value="{{#user}}{{id}}{{/user}}">
+  <button class="ui button" type="submit">Créer</button>
+ 
+</form>
+
+
+{{>main/footer}}
