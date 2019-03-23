@@ -68,8 +68,25 @@ public class ScriptController {
 		Date now = new Date();
 		Script script = new Script(language, user, category, title, description, content, now);
 		scriptRepo.save(script);
-		return "scripts/";
+		model.addAttribute("user",session.getAttribute("user"));
+		return "scripts/index";
+	}
+	
+	@GetMapping("display")
+	public String display(Model model) {
+		List<Script> scripts = scriptRepo.findAll();
+		model.addAttribute("scripts",scripts);
+		return "scripts/display";
 	}
 
+	@GetMapping(value = "edit/{id}")
+	public String edit(Model model, HttpSession session, @PathVariable int id) {
+		List<Script> scripts = scriptRepo.findAll();
+		for(Script script : scripts) {
+			if(script.getId() == id )
+				model.addAttribute("script", script);
+		}
+		return "scripts/edit";
+	}
 	
 }

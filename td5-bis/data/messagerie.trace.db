@@ -21969,3 +21969,7 @@ select user0_.id as id1_4_, user0_.email as email2_4_, user0_.identity as identi
 org.h2.jdbc.JdbcSQLException: Erreur de syntaxe dans linstruction SQL {0}; attendu {1}
 Syntax error in SQL statement {0}; expected {1}; SQL statement:
 insert into user('1','1@email.com','Identity','log','mdp') [42001-197]
+2019-03-22 13:40:47 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLException: Erreur de syntaxe dans linstruction SQL {0}; attendu {1}
+Syntax error in SQL statement {0}; expected {1}; SQL statement:
+delete * from script [42001-197]
