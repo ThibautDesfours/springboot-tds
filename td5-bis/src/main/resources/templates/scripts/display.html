@@ -1,6 +1,5 @@
 {{>main/header}}
 {{>main/menu}}
-
 <table id="example" class="ui celled table" style="width:100%">
         <thead>
             <tr>
@@ -11,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-        	{{#scripts}}
+        	{{#scriptsUser}}
 	            <tr>
 	                <td>{{title}}</td>
 	                <td>{{description}}</td>
@@ -20,6 +19,13 @@
 	                		<i class="edit icon"></i>
 	                	</a>
 	               	</td>
+	            </tr>
+            {{/scriptsUser}}
+            {{#scripts}}
+	            <tr>
+	                <td>{{title}}</td>
+	                <td>{{description}}</td>
+	                <td>{{creationDate}}</td>
 	            </tr>
             {{/scripts}}
          </tbody>

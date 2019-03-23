@@ -2,6 +2,7 @@ package s4.spring.td2.controllers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -49,10 +50,8 @@ public class ScriptController {
 	public String formScript(Model model, HttpSession session) {
 		List<Language> languages = langRepo.findAll();
 		List<Category> categories = cateRepo.findAll();
-		List<History> histories = histoRepo.findAll();
 		model.addAttribute("languages",languages);
 		model.addAttribute("categories",categories);
-		model.addAttribute("histories",histories);
 		model.addAttribute("user",session.getAttribute("user"));
 		return "scripts/ajoutScripts";
 	}
@@ -72,21 +71,68 @@ public class ScriptController {
 		return "scripts/index";
 	}
 	
-	@GetMapping("display")
-	public String display(Model model) {
+	@RequestMapping(value="display", method = RequestMethod.GET)
+	public String display(Model model, HttpSession session,@RequestParam("id") int id) {
 		List<Script> scripts = scriptRepo.findAll();
+		List<Script> scriptsUser = new ArrayList();
+		for(Script script : scripts) {
+			if(script.getUser().getId() == id) {
+				scriptsUser.add(script);
+			}
+		}
+		for(Script script : scriptsUser) {
+			scripts.remove(script);
+		}
+		model.addAttribute("user",session.getAttribute("user"));
 		model.addAttribute("scripts",scripts);
+		model.addAttribute("scriptsUser",scriptsUser);
 		return "scripts/display";
 	}
 
 	@GetMapping(value = "edit/{id}")
 	public String edit(Model model, HttpSession session, @PathVariable int id) {
-		List<Script> scripts = scriptRepo.findAll();
-		for(Script script : scripts) {
-			if(script.getId() == id )
-				model.addAttribute("script", script);
+		int indexLanguage=0, indexCategory=0;
+		Script script = scriptRepo.getOne(id);
+		model.addAttribute("script", script);
+		List<Language> languages = langRepo.findAll();
+		for(int i=0;i<languages.size();i++) {
+			if(languages.get(i).getId() == script.getLanguage().getId()) {
+				indexLanguage = i;
+				model.addAttribute("language",languages.get(i));
+			}
 		}
+		languages.remove(indexLanguage);
+		model.addAttribute("languages",languages);
+		List<Category> categories = cateRepo.findAll();
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).getId() == script.getCategory().getId()) {
+				indexCategory = i;
+				model.addAttribute("category",categories.get(i));
+			}
+		}
+		categories.remove(indexCategory);
+		model.addAttribute("user",session.getAttribute("user"));
+		model.addAttribute("categories",categories);
+				
 		return "scripts/edit";
+	}
+	
+	@RequestMapping(value = "submitEdit", method = RequestMethod.POST)
+	public String modifyScript(Model model, HttpSession session, @RequestParam("title") String title,
+			@RequestParam("description") String description, @RequestParam("content") String content,
+			@RequestParam("language") int languageId, @RequestParam("category") int categoryId,
+			@RequestParam("id") int id) {
+		Script script = scriptRepo.getOne(id);
+		Language language = new Language(languageId,"");
+		Category category = new Category(categoryId,"");
+		script.setCategory(category);
+		script.setLanguage(language);
+		script.setTitle(title);
+		script.setDescription(description);
+		script.setContent(content);
+		scriptRepo.save(script);
+		model.addAttribute("user",session.getAttribute("user"));
+		return "scripts/index";
 	}
 	
 }

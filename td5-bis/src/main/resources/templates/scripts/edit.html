@@ -1,11 +1,49 @@
 {{>main/header}}
 {{>main/menu}}
+<form class="ui form" method="POST" action="http://127.0.0.1:8081/scripts/submitEdit">
+  <div class="two fields">
+	  <div class="field">
+	    <label>Title</label>
+	    <input type="text" name="title"  value="{{#script}}{{title}}{{/script}}">
+	  </div>
+	  <div class="field">
+	  	<label>Content</label>
+	    <input type="text" name="content"  value="{{#script}}{{content}}{{/script}}">
+	  </div>
+  </div>
+  <div class="field">
+	<label>Description</label>
+	<input type="text" name="description" value="{{#script}}{{description}}{{/script}}">
+  </div>
+  <div class="two fields">
+	  <div class="field">
+	  	<label>Language</label>
+	    <select class="ui fluid dropdown" name="language">
+	       	{{#language}}
+				<option selected value="{{id}}">{{name}}</option>	       	
+	       	{{/language}}
+	        {{#languages}}
+	        	<option value="{{id}}">{{name}}</option>
+	        {{/languages}}
+	    </select>
+     </div>
+	 <div class="field">
+	  	<label>Catégorie</label>
+	    <select class="ui fluid dropdown" name="category">
+	        {{#category}}
+	        	<option selected value="{{id}}">{{name}}</option>
+	        {{/category}}
+	        {{#categories}}
+	        	<option value="{{id}}">{{name}}</option>
+	        {{/categories}}
+	    </select>
+	 </div>
+  </div>
+  <input type="hidden" name="id" value="{{id}}">
+  <button class="ui button" type="submit">Submit</button>
+ 
+</form>
 
-{{#script}}
-	{{id}}
-	{{description}}
-	{{content}}
-{{/script}}
 
 
 
