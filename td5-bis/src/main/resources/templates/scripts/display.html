@@ -1,5 +1,6 @@
 {{>main/header}}
 {{>main/menu}}
+
 <table id="example" class="ui celled table" style="width:100%">
         <thead>
             <tr>
@@ -10,22 +11,15 @@
             </tr>
         </thead>
         <tbody>
-        	{{#scriptsUser}}
-	            <tr>
-	                <td>{{title}}</td>
-	                <td>{{description}}</td>
-	                <td>{{creationDate}}</td>
-	                <td><a href="http://127.0.0.1:8081/scripts/edit/{{id}}">
-	                		<i class="edit icon"></i>
-	                	</a>
-	               	</td>
-	            </tr>
-            {{/scriptsUser}}
             {{#scripts}}
 	            <tr>
 	                <td>{{title}}</td>
 	                <td>{{description}}</td>
 	                <td>{{creationDate}}</td>
+	                <td><a href="http://127.0.0.1:8081/scripts/edit/{{id}}?idUser={{#userSession}}{{id}}{{/userSession}}">
+	                		<i class="edit icon"></i>
+	                	</a>
+	               	</td>
 	            </tr>
             {{/scripts}}
          </tbody>

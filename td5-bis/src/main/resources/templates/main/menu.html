@@ -3,13 +3,13 @@
   <a class="item" href="http://127.0.0.1:8081/scripts/new">
     Ajout Script
   </a>
-  <a class="item" href="http://127.0.0.1:8081/scripts/display?id={{#user}}{{id}}{{/user}}">
+  <a class="item" href="http://127.0.0.1:8081/scripts/display">
     Consultation Script
   </a>
-  <a class="item">
-    Consultation Profil
-  </a>
   <div class="right menu">
+	  <a class="item" href="http://127.0.0.1:8081/scripts/index">
+	    <i class="user icon"></i> {{#userSession}}{{identity}}{{/userSession}}
+	  </a>
     <form action="http://127.0.0.1:8081/appli/logout" method="POST">
 		<input class="ui red button" type="submit" value="Logout">
 	</form>

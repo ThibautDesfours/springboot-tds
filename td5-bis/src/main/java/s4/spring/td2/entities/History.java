@@ -54,9 +54,14 @@ public class History {
 	public History() {
 		
 	}
-	public History(int id) {
-		this.id=id;
+	public History(Date date, String content, String comment, Script script) {
+		super();
+		this.date = date;
+		this.content = content;
+		this.comment = comment;
+		this.script = script;
 	}
+	
 	
 	
 }

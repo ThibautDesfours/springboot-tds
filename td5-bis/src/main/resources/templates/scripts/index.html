@@ -1,9 +1,34 @@
 {{>main/header}}
 {{>main/menu}}
 <div class="ui segment">
-  <p>Bonjour {{#user}}{{identity}}{{/user}} !</p>
-</div>
-
-
-
+	{{#userSession}}
+	  <p><strong>{{identity}} :</strong></p>
+	  <p><i class="user icon"></i> : {{login}}</p>
+	  <p><i class="envelope icon"></i> : {{email}}</p>
+	{{/userSession}}
+	
+	<p><strong>Vos scripts :</strong></p>
+	<table id="example" class="ui celled table" style="width:100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Creation date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#scripts}}
+	            <tr>
+	                <td>{{title}}</td>
+	                <td>{{description}}</td>
+	                <td>{{creationDate}}</td>
+	                <td><a href="http://127.0.0.1:8081/scripts/edit/{{id}}?idUser={{#userSession}}{{id}}{{/userSession}}">
+	                		<i class="edit icon"></i>
+	                	</a>
+	               	</td>
+	            </tr>
+            {{/scripts}}
+         </tbody>
+	</table>
 {{>main/footer}}

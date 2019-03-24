@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,15 @@ public class ScriptController {
 	
 	@GetMapping({ "","index" })
 	public String index(Model model, HttpSession session) {
-		model.addAttribute("user",session.getAttribute("user"));
+		User user = (User)session.getAttribute("user");
+		model.addAttribute("userSession",user);
+		List<Script> scripts = scriptRepo.findAll();
+		List<Script> scriptsUser = new ArrayList();
+		for(Script script : scripts) {
+			if(script.getUser().getId() == user.getId())
+				scriptsUser.add(script);
+		}
+		model.addAttribute("scripts", scriptsUser);
 		return "scripts/index";
 	}
 	@GetMapping({ "new" })
@@ -52,69 +61,67 @@ public class ScriptController {
 		List<Category> categories = cateRepo.findAll();
 		model.addAttribute("languages",languages);
 		model.addAttribute("categories",categories);
-		model.addAttribute("user",session.getAttribute("user"));
+		model.addAttribute("userSession",session.getAttribute("user"));
 		return "scripts/ajoutScripts";
 	}
 	
 	@RequestMapping(value = "submit", method = RequestMethod.POST)
 	public String ajoutScript(Model model, HttpSession session, @RequestParam("title") String title,
 			@RequestParam("description") String description, @RequestParam("content") String content,
-			@RequestParam("language") int languageId, @RequestParam("category") int categoryId, 
-			@RequestParam("idUser") int idUser) {
+			@RequestParam("language") int languageId, @RequestParam("category") int categoryId,@RequestParam("idUser") int idUser) {
+		
 		User user = new User(idUser,"","","","");
 		Language language = new Language(languageId,"");
 		Category category = new Category(categoryId,"");
 		Date now = new Date();
 		Script script = new Script(language, user, category, title, description, content, now);
+		List<History> histories = new ArrayList();
+		History history = new History(now,content,"newScript",script);
+		histories.add(history);
+		script.setHistories(histories);
 		scriptRepo.save(script);
-		model.addAttribute("user",session.getAttribute("user"));
-		return "scripts/index";
+		histoRepo.save(history);
+		model.addAttribute("userSession",user);
+		
+		return index(model,session);
 	}
 	
-	@RequestMapping(value="display", method = RequestMethod.GET)
-	public String display(Model model, HttpSession session,@RequestParam("id") int id) {
+	@GetMapping(value="display")
+	public String display(Model model, HttpSession session) {
 		List<Script> scripts = scriptRepo.findAll();
-		List<Script> scriptsUser = new ArrayList();
-		for(Script script : scripts) {
-			if(script.getUser().getId() == id) {
-				scriptsUser.add(script);
-			}
-		}
-		for(Script script : scriptsUser) {
-			scripts.remove(script);
-		}
-		model.addAttribute("user",session.getAttribute("user"));
+		model.addAttribute("userSession",session.getAttribute("user"));
 		model.addAttribute("scripts",scripts);
-		model.addAttribute("scriptsUser",scriptsUser);
 		return "scripts/display";
 	}
 
-	@GetMapping(value = "edit/{id}")
-	public String edit(Model model, HttpSession session, @PathVariable int id) {
+	@RequestMapping(value = "edit/{id}",method = RequestMethod.GET)
+	public String edit(Model model, HttpSession session, @PathVariable int id, @RequestParam("idUser") int idUser) {
 		int indexLanguage=0, indexCategory=0;
 		Script script = scriptRepo.getOne(id);
 		model.addAttribute("script", script);
 		List<Language> languages = langRepo.findAll();
-		for(int i=0;i<languages.size();i++) {
-			if(languages.get(i).getId() == script.getLanguage().getId()) {
-				indexLanguage = i;
-				model.addAttribute("language",languages.get(i));
+		if(script.getUser().getId() == idUser) {
+			for(int i=0;i<languages.size();i++) {
+				if(languages.get(i).getId() == script.getLanguage().getId()) {
+					indexLanguage = i;
+					model.addAttribute("language",languages.get(i));
+				}
 			}
-		}
-		languages.remove(indexLanguage);
-		model.addAttribute("languages",languages);
-		List<Category> categories = cateRepo.findAll();
-		for(int i=0;i<categories.size();i++) {
-			if(categories.get(i).getId() == script.getCategory().getId()) {
-				indexCategory = i;
-				model.addAttribute("category",categories.get(i));
+			languages.remove(indexLanguage);
+			model.addAttribute("languages",languages);
+			List<Category> categories = cateRepo.findAll();
+			for(int i=0;i<categories.size();i++) {
+				if(categories.get(i).getId() == script.getCategory().getId()) {
+					indexCategory = i;
+					model.addAttribute("category",categories.get(i));
+				}
 			}
-		}
-		categories.remove(indexCategory);
-		model.addAttribute("user",session.getAttribute("user"));
-		model.addAttribute("categories",categories);
-				
-		return "scripts/edit";
+			categories.remove(indexCategory);
+			model.addAttribute("userSession",session.getAttribute("user"));
+			model.addAttribute("categories",categories);
+			return "scripts/edit";
+		}else return "scripts/noPermission";	
+		
 	}
 	
 	@RequestMapping(value = "submitEdit", method = RequestMethod.POST)
@@ -130,9 +137,13 @@ public class ScriptController {
 		script.setTitle(title);
 		script.setDescription(description);
 		script.setContent(content);
+		Date now = new Date();
+		History history = new History(now,content,"edit",script);
+		script.getHistories().add(history);
+		histoRepo.save(history);
 		scriptRepo.save(script);
-		model.addAttribute("user",session.getAttribute("user"));
-		return "scripts/index";
+		model.addAttribute("userSession",session.getAttribute("user"));
+		return index(model,session);
 	}
 	
 }
