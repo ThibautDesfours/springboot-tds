@@ -1,0 +1,33 @@
+{{>main/header}}
+{{>main/menu}}
+<form class="ui form" >
+  <div class="two fields">
+	  <div class="field">
+	    <label>Title</label>
+	    <input type="text" name="title" disabled value="{{#script}}{{title}}{{/script}}">
+	  </div>
+	  <div class="field">
+	  	<label>Content</label>
+	    <input type="text" name="content" disabled value="{{#script}}{{content}}{{/script}}">
+	  </div>
+  </div>
+  <div class="field">
+	<label>Description</label>
+	<input type="text" name="description" disabled value="{{#script}}{{description}}{{/script}}">
+  </div>
+  <div class="two fields">
+	  <div class="field">
+	  	<label>Language</label>
+	   <input type="text" disabled value="{{#language}}{{name}}{{/language}}">
+     </div>
+	 <div class="field">
+	  	<label>Catégorie</label>
+	    <input type="text" disabled value="{{#category}}{{name}}{{/category}}">
+	 </div>
+  </div>
+</form>
+
+
+
+
+{{>main/footer}}

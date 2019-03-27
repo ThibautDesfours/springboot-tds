@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
+import io.github.jeemv.springboot.vuejs.VueJS;
 import s4.spring.td2.entities.*;
 
 import s4.spring.td2.repositories.*;
@@ -41,6 +42,7 @@ public class ScriptController {
 	private ScriptsRepository scriptRepo;
 	@Autowired
 	private UsersRepository userRepo;
+
 	
 	@GetMapping({ "","index" })
 	public String index(Model model, HttpSession session) {
@@ -145,5 +147,45 @@ public class ScriptController {
 		model.addAttribute("userSession",session.getAttribute("user"));
 		return index(model,session);
 	}
+	
+	@RequestMapping(value = "submitDelete/{id}", method = RequestMethod.GET)
+	public String modifyScript(Model model, HttpSession session, @RequestParam("idUser") int idUser, @PathVariable("id") int id ) {
+		Optional <Script> script = scriptRepo.findById(id);
+		if(script.get().getUser().getId() == idUser) {
+			List<History> histories = histoRepo.findAll();
+			for(History hist : histories){
+				if(hist.getScript() == script.get())
+					histoRepo.delete(hist);
+			}
+			scriptRepo.deleteById(script.get().getId());
+			model.addAttribute("userSession",session.getAttribute("user"));
+			return index(model,session);
+		}else
+			return "scripts/noPermission";
+	}
+	
+	@GetMapping("fulldisplay/{id}")
+	public String fulldisplay(Model model, HttpSession session, @PathVariable("id") int id) {
+		Optional <Script> script = scriptRepo.findById(id);
+		model.addAttribute("script",script.get());
+		List<Language> languages = langRepo.findAll();
+		for(int i=0;i<languages.size();i++) {
+			if(languages.get(i).getId() == script.get().getLanguage().getId()) {
+				model.addAttribute("language",languages.get(i));
+			}
+		}
+		List<Category> categories = cateRepo.findAll();
+		for(int i=0;i<categories.size();i++) {
+			if(categories.get(i).getId() == script.get().getCategory().getId()) {
+				model.addAttribute("category",categories.get(i));
+			}
+		}
+		model.addAttribute("userSession",session.getAttribute("user"));
+		return "scripts/fulldisplay";
+	}
+	
+	
+	
+	
 	
 }
