@@ -15,6 +15,8 @@
                 <th>Description</th>
                 <th>Creation date</th>
                 <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -27,8 +29,19 @@
 	                		<i class="edit icon"></i>
 	                	</a>
 	               	</td>
+	               	<td>
+	               		<a href="http://127.0.0.1:8081/scripts/submitDelete/{{id}}?idUser={{#userSession}}{{id}}{{/userSession}}">
+	               			<i class="trash alternate outline icon"></i>
+	               		</a>
+	               	</td>
+	               	<td>
+	               		<a href="http://127.0.0.1:8081/scripts/fulldisplay/{{id}}">
+	               			<i class="eye icon"></i>
+	               		</a>
+	               	</td>
 	            </tr>
             {{/scripts}}
          </tbody>
 	</table>
+</div>
 {{>main/footer}}

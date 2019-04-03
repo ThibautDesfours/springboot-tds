@@ -1,43 +1,43 @@
 {{>main/header}}
 {{>main/menu}}
 
-</div>
-<table id="example" class="ui celled table" style="width:100%">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Creation date</th>
-                <th></th>
-               	<th></th>
-               	<th></th> 
-            </tr>
-        </thead>
-        <tbody>
-            {{#scripts}}
+<div class="ui segment">
+	<table id="example" class="ui celled table" style="width:100%">
+	        <thead>
 	            <tr>
-	                <td>{{title}}</td>
-	                <td>{{description}}</td>
-	                <td>{{creationDate}}</td>
-	                <td><a href="http://127.0.0.1:8081/scripts/edit/{{id}}?idUser={{#userSession}}{{id}}{{/userSession}}">
-	                		<i class="edit icon"></i>
-	                	</a>
-	                </td>
-	                <td>
-	               		<a href="http://127.0.0.1:8081/scripts/submitDelete/{{id}}?idUser={{#userSession}}{{id}}{{/userSession}}">
-	               			<i class="trash alternate outline icon"></i>
-	               		</a>
-	               	</td>
-	               	<td>
-	               		<a href="http://127.0.0.1:8081/scripts/fulldisplay/{{id}}">
-	               			<i class="eye icon"></i>
-	               		</a>
-	               	</td>
+	                <th>Title</th>
+	                <th>Description</th>
+	                <th>Creation date</th>
+	                <th></th>
+	               	<th></th>
+	               	<th></th> 
 	            </tr>
-            {{/scripts}}
-         </tbody>
-</table>
-
+	        </thead>
+	        <tbody>
+	            {{#scripts}}
+		            <tr>
+		                <td>{{title}}</td>
+		                <td>{{description}}</td>
+		                <td>{{creationDate}}</td>
+		                <td><a href="http://127.0.0.1:8081/scripts/edit/{{id}}?idUser={{#userSession}}{{id}}{{/userSession}}">
+		                		<i class="edit icon"></i>
+		                	</a>
+		                </td>
+		                <td>
+		               		<a href="http://127.0.0.1:8081/scripts/submitDelete/{{id}}?idUser={{#userSession}}{{id}}{{/userSession}}">
+		               			<i class="trash alternate outline icon"></i>
+		               		</a>
+		               	</td>
+		               	<td>
+		               		<a href="http://127.0.0.1:8081/scripts/fulldisplay/{{id}}">
+		               			<i class="eye icon"></i>
+		               		</a>
+		               	</td>
+		            </tr>
+	            {{/scripts}}
+	         </tbody>
+	</table>
+</div>
 
 
 {{>main/footer}}
